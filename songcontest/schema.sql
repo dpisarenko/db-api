@@ -7,6 +7,9 @@ SET search_path = songcontest;
 
 -- Insert table creation statements here
 
+INSERT INTO peeps.atkeys(atkey, description) VALUES('fan', 'Person is a fan.');
+INSERT INTO peeps.atkeys(atkey, description) VALUES('musician', 'Person is a musician.');
+
 COMMIT;
 
 ----------------------------
