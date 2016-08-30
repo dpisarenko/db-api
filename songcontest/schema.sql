@@ -13,10 +13,9 @@ CREATE TABLE songcontest.songs(
 );
 
 
-INSERT INTO peeps.atkeys(atkey, description) VALUES('fan', 'Person is a fan.');
-INSERT INTO peeps.atkeys(atkey, description) VALUES('musician', 'Person is a musician.');
+-- INSERT INTO peeps.atkeys(atkey, description) VALUES('fan', 'Person is a fan.');
+-- INSERT INTO peeps.atkeys(atkey, description) VALUES('musician', 'Person is a musician.');
 
-COMMIT;
 
 ----------------------------
 ----------------- FUNCTIONS:
@@ -26,7 +25,7 @@ COMMIT;
 -- person_id - ID of the user, who uploaded the song
 -- Return value: ID of the song (which we may use as filename component).
 
-CREATE OR REPLACE FUNCTION songcontest.song_create(person_id integer) RETURNS integer AS $$
+CREATE OR REPLACE FUNCTION songcontest.song_create(person_id integer) RETURNS SETOF integer AS $$
 BEGIN
 	RETURN QUERY INSERT INTO songcontest.songs(owner_id) VALUES(person_id) RETURNING songcontest.songs.id;
 END;
@@ -41,3 +40,5 @@ $$ LANGUAGE plpgsql;
 ----------------------------------------
 ------------------------- API FUNCTIONS:
 ----------------------------------------
+
+COMMIT;
