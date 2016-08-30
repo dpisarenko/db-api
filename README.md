@@ -15,6 +15,7 @@ For some explanation, see <http://sivers.org/pg>
 * **muckwork** : muckwork.com
 * **musicthoughts** : musicthoughts.com
 * **woodegg** : book research data, shared at data.woodegg.com
+* **songcontest** : free, open [song contest](https://sivers.org/songtest).
 
 ## In each schema directory:
 
