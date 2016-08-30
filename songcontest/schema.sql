@@ -13,8 +13,8 @@ CREATE TABLE songcontest.songs(
 );
 
 
--- INSERT INTO peeps.atkeys(atkey, description) VALUES('fan', 'Person is a fan.');
--- INSERT INTO peeps.atkeys(atkey, description) VALUES('musician', 'Person is a musician.');
+INSERT INTO peeps.atkeys(atkey, description) VALUES('fan', 'Person is a fan.');
+INSERT INTO peeps.atkeys(atkey, description) VALUES('musician', 'Person is a musician.');
 
 
 ----------------------------
