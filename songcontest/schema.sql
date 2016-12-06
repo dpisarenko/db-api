@@ -25,7 +25,7 @@ INSERT INTO peeps.atkeys(atkey, description) VALUES('musician', 'Person is a mus
 -- person_id - ID of the user, who uploaded the song
 -- Return value: Created song record.
 
-CREATE OR REPLACE FUNCTION songcontest.song_create(person_id integer) RETURNS SET OF songcontest.songs AS $$
+CREATE OR REPLACE FUNCTION songcontest.song_create(person_id integer) RETURNS SETOF songcontest.songs AS $$
 BEGIN
 	RETURN QUERY INSERT INTO songcontest.songs (owner_id) VALUES (person_id) RETURNING songcontest.songs.*;
 END;
