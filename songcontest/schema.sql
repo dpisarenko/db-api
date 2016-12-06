@@ -43,7 +43,7 @@ DECLARE
 BEGIN
 	SELECT id INTO sid FROM songcontest.song_create($1);
 	status := 200;
-	js := row_to_json(r.*) FROM songcontest.song_view r WHERE id = sid;
+	js := row_to_json(r.*) FROM songcontest.songs r WHERE id = sid;
 EXCEPTION
 	WHEN OTHERS THEN GET STACKED DIAGNOSTICS
 		err_code = RETURNED_SQLSTATE,
