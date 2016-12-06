@@ -23,7 +23,7 @@ INSERT INTO peeps.atkeys(atkey, description) VALUES('musician', 'Person is a mus
 
 -- Function to insert a new song
 -- person_id - ID of the user, who uploaded the song
--- Return value: ID of the song (which we may use as filename component).
+-- Return value: Created song record.
 
 CREATE OR REPLACE FUNCTION songcontest.song_create(person_id integer) RETURNS SET OF songcontest.songs AS $$
 BEGIN
