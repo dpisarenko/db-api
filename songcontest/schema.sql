@@ -9,7 +9,7 @@ SET search_path = songcontest;
 
 CREATE TABLE songcontest.songs(
 	id serial primary key,
-	owner_id integer NOT NULL UNIQUE REFERENCES peeps.people(id) ON DELETE RESTRICT  	
+	owner_id integer NOT NULL REFERENCES peeps.people(id) ON DELETE RESTRICT  	
 );
 
 DROP VIEW IF EXISTS songcontest.song_view
