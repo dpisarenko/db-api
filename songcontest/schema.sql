@@ -9,9 +9,14 @@ SET search_path = songcontest;
 
 CREATE TABLE songcontest.songs(
 	id serial primary key,
-	owner_id integer NOT NULL UNIQUE REFERENCES peeps.people(id) ON DELETE RESTRICT  	
+	owner_id integer NOT NULL REFERENCES peeps.people(id) ON DELETE RESTRICT  	
 );
 
+DROP VIEW IF EXISTS songcontest.song_view
+CASCADE;
+CREATE VIEW songcontest.song_view AS
+	SELECT id, owner_id
+	FROM songcontest.songs;
 
 DO $$
 BEGIN
@@ -56,7 +61,7 @@ DECLARE
 BEGIN
 	SELECT id INTO sid FROM songcontest.song_create($1);
 	status := 200;
-	js := row_to_json(r.*) FROM songcontest.songs r WHERE id = sid;
+	js := row_to_json(r.*) FROM songcontest.song_view r WHERE id = sid;
 EXCEPTION
 	WHEN OTHERS THEN GET STACKED DIAGNOSTICS
 		err_code = RETURNED_SQLSTATE,
