@@ -13,8 +13,21 @@ CREATE TABLE songcontest.songs(
 );
 
 
-INSERT INTO peeps.atkeys(atkey, description) VALUES('fan', 'Person is a fan.');
-INSERT INTO peeps.atkeys(atkey, description) VALUES('musician', 'Person is a musician.');
+DO $$
+BEGIN
+	INSERT INTO peeps.atkeys(atkey, description) VALUES('fan', 'Person is a fan.');
+EXCEPTION 
+	WHEN UNIQUE_VIOLATION THEN
+END $$;
+
+DO $$
+BEGIN
+	INSERT INTO peeps.atkeys(atkey, description) VALUES('musician', 'Person is a musician.');
+EXCEPTION 
+	WHEN UNIQUE_VIOLATION THEN
+END $$;
+
+
 
 
 ----------------------------
