@@ -12,6 +12,14 @@ CREATE TABLE songcontest.songs(
 	owner_id integer NOT NULL REFERENCES peeps.people(id) ON DELETE RESTRICT  	
 );
 
+CREATE TABLE songcontest.feedback(
+	person_id integer NOT NULL REFERENCES peeps.people(id) ON DELETE RESTRICT,
+	song_id integer NOT NULL REFERENCES songcontest.songs(id) ON DELETE RESTRICT,
+	grade smallint NOT NULL DEFAULT 0,
+	comment TEXT NOT NULL
+);
+
+
 DROP VIEW IF EXISTS songcontest.song_view
 CASCADE;
 CREATE VIEW songcontest.song_view AS
@@ -75,6 +83,45 @@ EXCEPTION
 		'detail', err_detail || err_context);
 END;
 $$ LANGUAGE plpgsql;
+
+-- Functions for finding the next song that a given user (fan)
+-- hasn't listened to yet.
+CREATE OR REPLACE FUNCTION songcontest.song_find(person_id integer) RETURNS SETOF songcontest.songs AS $$
+BEGIN
+	RETURN QUERY SELECT songcontest.songs.*
+	FROM songcontest.songs
+	WHERE songcontest.songs.id NOT IN (SELECT DISTINCT songcontest.feedback.song_id FROM songcontest.feedback WHERE songcontest.feedback.person_id=person_id)
+	LIMIT 1;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION songcontest.find_song(person_id integer, OUT status smallint, OUT js json) AS $$
+DECLARE
+	song RECORD;
+
+	err_code text;
+	err_msg text;
+	err_detail text;
+	err_context text;
+
+BEGIN
+	SELECT * INTO song FROM songcontest.song_find($1);
+	status := 200;
+	js := row_to_json(song.*)
+EXCEPTION
+	WHEN OTHERS THEN GET STACKED DIAGNOSTICS
+		err_code = RETURNED_SQLSTATE,
+		err_msg = MESSAGE_TEXT,
+		err_detail = PG_EXCEPTION_DETAIL,
+		err_context = PG_EXCEPTION_CONTEXT;
+	status := 500;
+	js := json_build_object(
+		'type', 'http://www.postgresql.org/docs/9.4/static/errcodes-appendix.html#' || err_code,
+		'title', err_msg,
+		'detail', err_detail || err_context);
+END;
+$$ LANGUAGE plpgsql;
+
 
 
 ----------------------------
