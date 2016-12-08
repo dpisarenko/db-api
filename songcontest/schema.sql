@@ -9,7 +9,8 @@ SET search_path = songcontest;
 
 CREATE TABLE songcontest.songs(
 	id serial primary key,
-	owner_id integer NOT NULL REFERENCES peeps.people(id) ON DELETE RESTRICT  	
+	owner_id integer NOT NULL REFERENCES peeps.people(id) ON DELETE RESTRICT,
+	name VARCHAR(256)
 );
 
 CREATE TABLE songcontest.feedback(
@@ -51,13 +52,13 @@ END $$;
 -- person_id - ID of the user, who uploaded the song
 -- Return value: Created song record.
 
-CREATE OR REPLACE FUNCTION songcontest.song_create(person_id integer) RETURNS SETOF songcontest.songs AS $$
+CREATE OR REPLACE FUNCTION songcontest.song_create(person_id integer, song_name VARCHAR(256)) RETURNS SETOF songcontest.songs AS $$
 BEGIN
-	RETURN QUERY INSERT INTO songcontest.songs (owner_id) VALUES (person_id) RETURNING songcontest.songs.*;
+	RETURN QUERY INSERT INTO songcontest.songs (owner_id, name) VALUES (person_id, song_name) RETURNING songcontest.songs.*;
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION songcontest.create_song(person_id integer, OUT status smallint, OUT js json) AS $$
+CREATE OR REPLACE FUNCTION songcontest.create_song(person_id integer, song_name VARCHAR(256), OUT status smallint, OUT js json) AS $$
 DECLARE
 	sid integer;
 
@@ -67,7 +68,7 @@ DECLARE
 	err_context text;
 
 BEGIN
-	SELECT id INTO sid FROM songcontest.song_create($1);
+	SELECT id INTO sid FROM songcontest.song_create($1, $2);
 	status := 200;
 	js := row_to_json(r.*) FROM songcontest.song_view r WHERE id = sid;
 EXCEPTION
