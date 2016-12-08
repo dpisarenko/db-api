@@ -134,14 +134,15 @@ $$ LANGUAGE plpgsql;
 
 CREATE OR REPLACE FUNCTION songcontest.create_feedback(p_person_id integer, p_song_id integer, p_grade smallint, p_grade_comment TEXT, OUT status smallint, OUT js json) AS $$
 DECLARE
+	fb RECORD;
 	err_code text;
 	err_msg text;
 	err_detail text;
 	err_context text;
 BEGIN
-	SELECT songcontest.feedback_create($1, $2, $3, $4);
+	SELECT * INTO fb FROM songcontest.feedback_create($1, $2, $3, $4);
 	status := 200;
-	js := row_to_json(r.*) FROM songcontest.feedback r WHERE (person_id = p_person_id) AND (song_id = p_song_id);
+	js := row_to_json(fb.*);
 EXCEPTION
 	WHEN OTHERS THEN GET STACKED DIAGNOSTICS
 		err_code = RETURNED_SQLSTATE,
