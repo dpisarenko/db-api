@@ -17,7 +17,8 @@ CREATE TABLE songcontest.feedback(
 	person_id integer NOT NULL REFERENCES peeps.people(id) ON DELETE RESTRICT,
 	song_id integer NOT NULL REFERENCES songcontest.songs(id) ON DELETE RESTRICT,
 	grade smallint NOT NULL DEFAULT 0,
-	comment TEXT NOT NULL
+	grade_comment TEXT NOT NULL,
+	UNIQUE (person_id, song_id)
 );
 
 
@@ -123,7 +124,37 @@ EXCEPTION
 END;
 $$ LANGUAGE plpgsql;
 
+-- @db.call('create_feedback', @person_id, song_id, grade, comment)
 
+CREATE OR REPLACE FUNCTION songcontest.feedback_create(p_person_id integer, p_song_id integer, p_grade smallint, p_grade_comment TEXT) RETURNS SETOF songcontest.feedback AS $$
+BEGIN
+	RETURN QUERY INSERT INTO songcontest.feedback (person_id, song_id, grade, grade_comment) VALUES (p_person_id, p_song_id, p_grade, p_grade_comment) RETURNING songcontest.feedback.*;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION songcontest.create_feedback(p_person_id integer, p_song_id integer, p_grade smallint, p_grade_comment TEXT, OUT status smallint, OUT js json) AS $$
+DECLARE
+	err_code text;
+	err_msg text;
+	err_detail text;
+	err_context text;
+BEGIN
+	SELECT songcontest.feedback_create($1, $2, $3, $4);
+	status := 200;
+	js := row_to_json(r.*) FROM songcontest.feedback r WHERE (person_id = p_person_id) AND (song_id = p_song_id);
+EXCEPTION
+	WHEN OTHERS THEN GET STACKED DIAGNOSTICS
+		err_code = RETURNED_SQLSTATE,
+		err_msg = MESSAGE_TEXT,
+		err_detail = PG_EXCEPTION_DETAIL,
+		err_context = PG_EXCEPTION_CONTEXT;
+	status := 500;
+	js := json_build_object(
+		'type', 'http://www.postgresql.org/docs/9.4/static/errcodes-appendix.html#' || err_code,
+		'title', err_msg,
+		'detail', err_detail || err_context);
+END;
+$$ LANGUAGE plpgsql;
 
 ----------------------------
 ------------------ TRIGGERS:
