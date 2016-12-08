@@ -107,7 +107,7 @@ DECLARE
 BEGIN
 	SELECT * INTO song FROM songcontest.song_find($1);
 	status := 200;
-	js := row_to_json(song.*)
+	js := row_to_json(song.*);
 EXCEPTION
 	WHEN OTHERS THEN GET STACKED DIAGNOSTICS
 		err_code = RETURNED_SQLSTATE,
