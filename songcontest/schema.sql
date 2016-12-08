@@ -86,11 +86,11 @@ $$ LANGUAGE plpgsql;
 
 -- Functions for finding the next song that a given user (fan)
 -- hasn't listened to yet.
-CREATE OR REPLACE FUNCTION songcontest.song_find(person_id integer) RETURNS SETOF songcontest.songs AS $$
+CREATE OR REPLACE FUNCTION songcontest.song_find(listener_id integer) RETURNS SETOF songcontest.songs AS $$
 BEGIN
 	RETURN QUERY SELECT songcontest.songs.*
 	FROM songcontest.songs
-	WHERE songcontest.songs.id NOT IN (SELECT DISTINCT songcontest.feedback.song_id FROM songcontest.feedback WHERE songcontest.feedback.person_id=person_id)
+	WHERE songcontest.songs.id NOT IN (SELECT DISTINCT songcontest.feedback.song_id FROM songcontest.feedback WHERE songcontest.feedback.person_id=listener_id)
 	LIMIT 1;
 END;
 $$ LANGUAGE plpgsql;
