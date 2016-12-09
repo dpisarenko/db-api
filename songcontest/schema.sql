@@ -157,6 +157,49 @@ EXCEPTION
 END;
 $$ LANGUAGE plpgsql;
 
+CREATE OR REPLACE FUNCTION songcontest.compose_all_songs_stats(person_id integer) RETURNS SETOF RECORD AS $$
+BEGIN
+	RETURN 
+		SELECT songcontest.songs.id, songcontest.songs.name, AVG(songcontest.feedback.grade), COUNT(songcontest.feedback.grade)
+		FROM songcontest.songs, songcontest.feedback
+		WHERE songcontest.feedback.song_id = songcontest.songs.id
+		GROUP BY songcontest.songs.id, songcontest.songs.name
+		HAVING songcontest.songs.owner_id = person_id;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION songcontest.all_songs_stats(person_id integer, OUT status smallint, OUT js json) AS $$
+DECLARE
+	err_code text;
+	err_msg text;
+	err_detail text;
+	err_context text;
+BEGIN
+	SELECT array_to_json(array_agg(r)) INTO json FROM songcontest.compose_all_songs_stats(person_id) r;	
+	status := 200;
+EXCEPTION
+	WHEN OTHERS THEN GET STACKED DIAGNOSTICS
+		err_code = RETURNED_SQLSTATE,
+		err_msg = MESSAGE_TEXT,
+		err_detail = PG_EXCEPTION_DETAIL,
+		err_context = PG_EXCEPTION_CONTEXT;
+	status := 500;
+	js := json_build_object(
+		'type', 'http://www.postgresql.org/docs/9.4/static/errcodes-appendix.html#' || err_code,
+		'title', err_msg,
+		'detail', err_detail || err_context);
+END;
+$$ LANGUAGE plpgsql;
+
+
+
+SELECT songcontest.songs.id, songcontest.songs.name, AVG(songcontest.feedback.grade), COUNT(songcontest.feedback.grade)
+FROM songcontest.songs, songcontest.feedback
+WHERE songcontest.feedback.song_id = songcontest.songs.id
+GROUP BY songcontest.songs.id, songcontest.songs.name
+HAVING songcontest.songs.owner_id = 2;
+
+
 ----------------------------
 ------------------ TRIGGERS:
 ----------------------------
