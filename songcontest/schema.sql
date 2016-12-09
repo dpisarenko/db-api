@@ -175,7 +175,7 @@ DECLARE
 	err_detail text;
 	err_context text;
 BEGIN
-	SELECT array_to_json(array_agg(r)) INTO json FROM songcontest.compose_all_songs_stats(person_id) r;	
+	SELECT array_to_json(array_agg(r)) INTO js FROM songcontest.compose_all_songs_stats(person_id) r;	
 	status := 200;
 EXCEPTION
 	WHEN OTHERS THEN GET STACKED DIAGNOSTICS
