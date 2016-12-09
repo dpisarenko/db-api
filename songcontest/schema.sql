@@ -157,7 +157,7 @@ EXCEPTION
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION songcontest.compose_all_songs_stats(p_person_id integer) RETURNS TABLE(song_id NUMERIC, song_name VARCHAR(256), avg_grade NUMERIC, feedback_count BIGINT) AS $$
+CREATE OR REPLACE FUNCTION songcontest.compose_all_songs_stats(p_person_id integer) RETURNS TABLE(song_id INTEGER, song_name VARCHAR(256), avg_grade NUMERIC, feedback_count BIGINT) AS $$
 BEGIN
 	RETURN QUERY
 		SELECT songcontest.songs.id, songcontest.songs.name, AVG(songcontest.feedback.grade), COUNT(songcontest.feedback.grade)
