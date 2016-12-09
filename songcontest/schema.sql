@@ -191,15 +191,6 @@ EXCEPTION
 END;
 $$ LANGUAGE plpgsql;
 
-
-
-SELECT songcontest.songs.id, songcontest.songs.name, AVG(songcontest.feedback.grade), COUNT(songcontest.feedback.grade)
-FROM songcontest.songs, songcontest.feedback
-WHERE songcontest.feedback.song_id = songcontest.songs.id
-GROUP BY songcontest.songs.id, songcontest.songs.name
-HAVING songcontest.songs.owner_id = 2;
-
-
 ----------------------------
 ------------------ TRIGGERS:
 ----------------------------
