@@ -159,7 +159,7 @@ $$ LANGUAGE plpgsql;
 
 CREATE OR REPLACE FUNCTION songcontest.compose_all_songs_stats(person_id integer) RETURNS SETOF RECORD AS $$
 BEGIN
-	RETURN 
+	RETURN QUERY
 		SELECT songcontest.songs.id, songcontest.songs.name, AVG(songcontest.feedback.grade), COUNT(songcontest.feedback.grade)
 		FROM songcontest.songs, songcontest.feedback
 		WHERE songcontest.feedback.song_id = songcontest.songs.id
