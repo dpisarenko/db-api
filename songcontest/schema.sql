@@ -157,14 +157,14 @@ EXCEPTION
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION songcontest.compose_all_songs_stats(person_id integer) RETURNS TABLE(song_id integer, song_name VARCHAR(256), avg_grade integer, feedback_count integer) AS $$
+CREATE OR REPLACE FUNCTION songcontest.compose_all_songs_stats(p_person_id integer) RETURNS TABLE(song_id integer, song_name VARCHAR(256), avg_grade integer, feedback_count integer) AS $$
 BEGIN
 	RETURN QUERY
 		SELECT songcontest.songs.id, songcontest.songs.name, AVG(songcontest.feedback.grade), COUNT(songcontest.feedback.grade)
 		FROM songcontest.songs, songcontest.feedback
 		WHERE songcontest.feedback.song_id = songcontest.songs.id
 		GROUP BY songcontest.songs.id, songcontest.songs.name
-		HAVING songcontest.songs.owner_id = person_id;
+		HAVING songcontest.songs.owner_id = p_person_id;
 END;
 $$ LANGUAGE plpgsql;
 
