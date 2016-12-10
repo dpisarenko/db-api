@@ -196,7 +196,7 @@ BEGIN
 	RETURN QUERY
 		SELECT songcontest.feedback.grade, songcontest.feedback.grade_comment
 		FROM songcontest.feedback, songcontest.songs
-		WHERE (songcontest.songs.id = songcontest.feedback.song_id) AND (songcontest.songs.owner_id = p_person_id);
+		WHERE (songcontest.songs.id = songcontest.feedback.song_id) AND (songcontest.songs.owner_id = p_person_id) AND (songcontest.songs.id = p_song_id);
 END;
 $$ LANGUAGE plpgsql;
 
