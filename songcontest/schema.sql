@@ -224,7 +224,7 @@ EXCEPTION
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION songcontest.calculate_song_stats_count(p_person_id integer, p_song_id integer) RETURNS INTEGER AS $$
+CREATE OR REPLACE FUNCTION songcontest.calculate_song_stats_count(p_person_id integer) RETURNS INTEGER AS $$
 DECLARE
 	songCount INTEGER;
 BEGIN	
