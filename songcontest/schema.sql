@@ -223,6 +223,41 @@ EXCEPTION
 		'detail', err_detail || err_context);
 END;
 $$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION songcontest.calculate_song_stats_count(p_person_id integer, p_song_id integer) RETURNS INTEGER AS $$
+BEGIN
+	RETURN QUERY
+		SELECT COUNT(*)
+		FROM songcontest.feedback, songcontest.songs
+		WHERE (songcontest.songs.song_id = songcontest.feedback.song_id) AND (songcontest.songs.owner_id = p_person_id);
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION songcontest.song_stats_count(person_id integer, OUT status smallint, OUT js json) AS $$
+DECLARE
+    statsCount RECORD;
+	err_code text;
+	err_msg text;
+	err_detail text;
+	err_context text;
+BEGIN
+	SELECT * INTO statsCount FROM songcontest.calculate_song_stats_count($1);
+	status := 200;
+	js := row_to_json(statsCount.*);
+EXCEPTION
+	WHEN OTHERS THEN GET STACKED DIAGNOSTICS
+		err_code = RETURNED_SQLSTATE,
+		err_msg = MESSAGE_TEXT,
+		err_detail = PG_EXCEPTION_DETAIL,
+		err_context = PG_EXCEPTION_CONTEXT;
+	status := 500;
+	js := json_build_object(
+		'type', 'http://www.postgresql.org/docs/9.4/static/errcodes-appendix.html#' || err_code,
+		'title', err_msg,
+		'detail', err_detail || err_context);
+END;
+$$ LANGUAGE plpgsql;
+
 ----------------------------
 ------------------ TRIGGERS:
 ----------------------------
