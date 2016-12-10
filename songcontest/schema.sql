@@ -226,7 +226,7 @@ $$ LANGUAGE plpgsql;
 
 CREATE OR REPLACE FUNCTION songcontest.calculate_song_stats_count(p_person_id integer, p_song_id integer) RETURNS INTEGER AS $$
 BEGIN
-	RETURN QUERY
+	RETURN
 		SELECT COUNT(*)
 		FROM songcontest.feedback, songcontest.songs
 		WHERE (songcontest.songs.song_id = songcontest.feedback.song_id) AND (songcontest.songs.owner_id = p_person_id);
