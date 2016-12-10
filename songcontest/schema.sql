@@ -231,7 +231,7 @@ BEGIN
 	SELECT COUNT(*)
 	INTO songCount
 	FROM songcontest.feedback, songcontest.songs
-	WHERE (songcontest.songs.song_id = songcontest.feedback.song_id) AND (songcontest.songs.owner_id = p_person_id);
+	WHERE (songcontest.songs.id = songcontest.feedback.song_id) AND (songcontest.songs.owner_id = p_person_id);
 	RETURN songCount;
 END;
 $$ LANGUAGE plpgsql;
