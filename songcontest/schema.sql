@@ -266,11 +266,11 @@ CREATE OR REPLACE FUNCTION songcontest.compose_song_name(p_person_id integer, p_
 DECLARE
 	songName VARCHAR(256);
 BEGIN	
-	SELECT name
+	SELECT songcontest.songs.name
 	INTO songName
 	FROM songcontest.songs
 	WHERE (songcontest.songs.id = p_song_id) AND (songcontest.songs.owner_id = p_person_id);
-	RETURN songCount;
+	RETURN songName;
 END;
 $$ LANGUAGE plpgsql;
 
