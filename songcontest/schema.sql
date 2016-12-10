@@ -262,7 +262,7 @@ $$ LANGUAGE plpgsql;
 
 
 
-CREATE OR REPLACE FUNCTION songcontest.compose_song_name(p_person_id integer, p_song_id integer) RETURNS INTEGER AS $$
+CREATE OR REPLACE FUNCTION songcontest.compose_song_name(p_person_id integer, p_song_id integer) RETURNS VARCHAR(256) AS $$
 DECLARE
 	songName VARCHAR(256);
 BEGIN	
