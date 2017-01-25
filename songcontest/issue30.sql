@@ -27,7 +27,8 @@ CREATE TABLE songcontest.contests(
 TODO: modify the table feedback so that it contains a link to the contestStatuses database.
 
 ALTER TABLE songcontest.feedback
-	ADD COLUMN contest integer NOT NULL REFERENCES songcontest.contests(id) ON DELETE RESTRICT;
+	ADD COLUMN contest_id integer NOT NULL REFERENCES songcontest.contests(id) ON DELETE RESTRICT;
 
 ALTER TABLE songcontest.feedback
+	ADD UNIQUE(person_id, song_id, contest_id);
 	
