@@ -22,9 +22,13 @@ CREATE TABLE songcontest.contests(
 	terms_description TEXT
 );
 
--- TODO: Add user type "organizer"
 
-TODO: modify the table feedback so that it contains a link to the contestStatuses database.
+DO $$
+BEGIN
+	INSERT INTO peeps.atkeys(atkey, description) VALUES('org', 'Person is a contest organizer.');
+EXCEPTION 
+	WHEN UNIQUE_VIOLATION THEN
+END $$;
 
 ALTER TABLE songcontest.feedback
 	ADD COLUMN contest_id integer NOT NULL REFERENCES songcontest.contests(id) ON DELETE RESTRICT;
