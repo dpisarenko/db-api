@@ -21,5 +21,10 @@ CREATE TABLE songcontest.contests(
 	state integer NOT NULL REFERENCES songcontest.statuses(id) ON DELETE RESTRICT,
 	terms_description TEXT
 );
-TODO: Add user type "organizer"
+
+-- TODO: Add user type "organizer"
+
 TODO: modify the table feedback so that it contains a link to the contestStatuses database.
+
+ALTER TABLE songcontest.feedback
+	ADD COLUMN contest integer NOT NULL REFERENCES songcontest.contests(id) ON DELETE RESTRICT;
