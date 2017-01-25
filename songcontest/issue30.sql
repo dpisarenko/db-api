@@ -28,3 +28,6 @@ TODO: modify the table feedback so that it contains a link to the contestStatuse
 
 ALTER TABLE songcontest.feedback
 	ADD COLUMN contest integer NOT NULL REFERENCES songcontest.contests(id) ON DELETE RESTRICT;
+
+ALTER TABLE songcontest.feedback
+	

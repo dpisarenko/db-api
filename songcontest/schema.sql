@@ -17,8 +17,7 @@ CREATE TABLE songcontest.feedback(
 	person_id integer NOT NULL REFERENCES peeps.people(id) ON DELETE RESTRICT,
 	song_id integer NOT NULL REFERENCES songcontest.songs(id) ON DELETE RESTRICT,
 	grade smallint NOT NULL DEFAULT 0,
-	grade_comment TEXT NOT NULL,
-	UNIQUE (person_id, song_id)
+	grade_comment TEXT NOT NULL
 );
 
 
