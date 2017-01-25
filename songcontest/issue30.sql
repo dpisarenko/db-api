@@ -6,13 +6,13 @@ CREATE TABLE songcontest.contestStatuses(
 
 );
 
-INSERT INTO songcontest.contestStatuses(id, name) VALUES(1, "New");
-INSERT INTO songcontest.contestStatuses(id, name) VALUES(2, "Approved");
-INSERT INTO songcontest.contestStatuses(id, name) VALUES(3, "Submitting songs");
-INSERT INTO songcontest.contestStatuses(id, name) VALUES(4, "Voting");
-INSERT INTO songcontest.contestStatuses(id, name) VALUES(5, "Finishing");
-INSERT INTO songcontest.contestStatuses(id, name) VALUES(6, "Completed");
-INSERT INTO songcontest.contestStatuses(id, name) VALUES(7, "Canceled");
+INSERT INTO songcontest.contestStatuses(id, name) VALUES(1, 'New');
+INSERT INTO songcontest.contestStatuses(id, name) VALUES(2, 'Approved');
+INSERT INTO songcontest.contestStatuses(id, name) VALUES(3, 'Submitting songs');
+INSERT INTO songcontest.contestStatuses(id, name) VALUES(4, 'Voting');
+INSERT INTO songcontest.contestStatuses(id, name) VALUES(5, 'Finishing');
+INSERT INTO songcontest.contestStatuses(id, name) VALUES(6, 'Completed');
+INSERT INTO songcontest.contestStatuses(id, name) VALUES(7, 'Canceled');
 
 CREATE TABLE songcontest.contests(
 	id serial primary key,
