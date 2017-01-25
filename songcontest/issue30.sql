@@ -18,7 +18,7 @@ CREATE TABLE songcontest.contests(
 	id serial primary key,
 	name VARCHAR(256),
 	sponsor_description TEXT,
-	state integer NOT NULL REFERENCES songcontest.statuses(id) ON DELETE RESTRICT,
+	state integer NOT NULL REFERENCES songcontest.contestStatuses(id) ON DELETE RESTRICT,
 	terms_description TEXT
 );
 
@@ -31,7 +31,7 @@ EXCEPTION
 END $$;
 
 ALTER TABLE songcontest.feedback
-	ADD COLUMN contest_id integer NOT NULL REFERENCES songcontest.contests(id) ON DELETE RESTRICT;
+	ADD COLUMN contest_id integer REFERENCES songcontest.contests(id) ON DELETE RESTRICT;
 
 ALTER TABLE songcontest.feedback
 	ADD UNIQUE(person_id, song_id, contest_id);
