@@ -11,7 +11,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION songcontest.get_all_contents(OUT status smallint, OUT js json) AS $$
+CREATE OR REPLACE FUNCTION songcontest.get_all_contests(OUT status smallint, OUT js json) AS $$
 DECLARE
 	song RECORD;
 
