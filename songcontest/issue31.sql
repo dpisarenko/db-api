@@ -6,8 +6,7 @@ CREATE OR REPLACE FUNCTION songcontest.all_contests_get() RETURNS SETOF songcont
 BEGIN
 	RETURN QUERY SELECT songcontest.contests.*
 	FROM songcontest.contests
-	ORDER BY songcontest.contests.id DESC
-	LIMIT 1;
+	ORDER BY songcontest.contests.id DESC;
 END;
 $$ LANGUAGE plpgsql;
 
