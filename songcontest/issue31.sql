@@ -2,7 +2,7 @@
 
 -- Function pair to retrieve a list of all song contests
 
-CREATE OR REPLACE FUNCTION songcontest.all_contests_get RETURNS SETOF songcontest.contests AS $$
+CREATE OR REPLACE FUNCTION songcontest.all_contests_get() RETURNS SETOF songcontest.contests AS $$
 BEGIN
 	RETURN QUERY SELECT songcontest.contests.*
 	FROM songcontest.contests
