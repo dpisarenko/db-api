@@ -36,3 +36,41 @@ EXCEPTION
 		'detail', err_detail || err_context);
 END;
 $$ LANGUAGE plpgsql;
+
+-- Function pair to retrieve the number of song contests
+
+CREATE OR REPLACE FUNCTION songcontest.calculate_contests_count() RETURNS INTEGER AS $$
+DECLARE
+	contestsCount INTEGER;
+BEGIN	
+	SELECT COUNT(*)
+	INTO contestsCount
+	FROM songcontest.contests;
+	RETURN contestsCount;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION songcontest.contests_count(OUT status smallint, OUT js json) AS $$
+DECLARE
+    contestsCount RECORD;
+	err_code text;
+	err_msg text;
+	err_detail text;
+	err_context text;
+BEGIN
+	SELECT * INTO contestsCount FROM songcontest.calculate_contests_count();
+	status := 200;
+	js := row_to_json(contestsCount.*);
+EXCEPTION
+	WHEN OTHERS THEN GET STACKED DIAGNOSTICS
+		err_code = RETURNED_SQLSTATE,
+		err_msg = MESSAGE_TEXT,
+		err_detail = PG_EXCEPTION_DETAIL,
+		err_context = PG_EXCEPTION_CONTEXT;
+	status := 500;
+	js := json_build_object(
+		'type', 'http://www.postgresql.org/docs/9.4/static/errcodes-appendix.html#' || err_code,
+		'title', err_msg,
+		'detail', err_detail || err_context);
+END;
+$$ LANGUAGE plpgsql;
